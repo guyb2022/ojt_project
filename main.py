@@ -31,7 +31,7 @@ def detect_faces(event, context):
     operation = client.annotate_video(
         request={
             "features": [videointelligence.Feature.FACE_DETECTION],
-            "input_uri": 'gs://my_first_bucket_vac/videoplayback.mp4',
+            #"input_uri": 'gs://my_first_bucket_vac/videoplayback.mp4',
             "video_context": video_context,
         }
     )
