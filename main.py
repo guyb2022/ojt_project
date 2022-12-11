@@ -96,7 +96,7 @@ def trigger_from_cloud_storge(event, context):
         print("Audio file detected.")
         # process the audio file
         process_audio(file, context)
-    elif file_type in ["mp4]:
+    elif file_type in ["mp4"]:
         # process the video file
         process_video(file, context)               
     else:
