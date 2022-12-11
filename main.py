@@ -16,7 +16,7 @@
 from google.cloud import videointelligence_v1 as videointelligence
 
 
-def detect_faces(event, context):
+def detect_faces():
     """Detects faces in a video."""
 
     client = videointelligence.VideoIntelligenceServiceClient()
