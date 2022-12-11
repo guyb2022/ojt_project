@@ -1,4 +1,4 @@
-# Copyright 2021 Google LLC
+# Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,19 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START video_detect_faces]
-import io
-
+# [START video_detect_faces_gcs]
 from google.cloud import videointelligence_v1 as videointelligence
 
 
-def detect_faces(local_file_path="path/to/your/video-file.mp4"):
-    """Detects faces in a video from a local file."""
+def detect_faces(event, context):
+    """Detects faces in a video."""
 
     client = videointelligence.VideoIntelligenceServiceClient()
-
-    with io.open(local_file_path, "rb") as f:
-        input_content = f.read()
 
     # Configure the request
     config = videointelligence.FaceDetectionConfig(
@@ -36,7 +31,7 @@ def detect_faces(local_file_path="path/to/your/video-file.mp4"):
     operation = client.annotate_video(
         request={
             "features": [videointelligence.Feature.FACE_DETECTION],
-            "input_content": input_content,
+            "input_uri": gcs_uri,
             "video_context": context,
         }
     )
@@ -82,4 +77,4 @@ def detect_faces(local_file_path="path/to/your/video-file.mp4"):
                 )
 
 
-# [END video_detect_faces]
+# [END video_detect_faces_gcs]
