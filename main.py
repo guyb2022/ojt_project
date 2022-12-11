@@ -35,7 +35,7 @@ def detect_faces(event, context):
             "video_context": video_context,
         }
     )
-
+    print(f"the request was: {request}")
     print("\nProcessing video for face detection annotations.")
     result = operation.result(timeout=300)
 
