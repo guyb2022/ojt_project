@@ -25,14 +25,14 @@ def detect_faces(event, context):
     config = videointelligence.FaceDetectionConfig(
         include_bounding_boxes=True, include_attributes=True
     )
-    context = videointelligence.VideoContext(face_detection_config=config)
+    video_context = videointelligence.VideoContext(face_detection_config=config)
 
     # Start the asynchronous request
     operation = client.annotate_video(
         request={
             "features": [videointelligence.Feature.FACE_DETECTION],
-            "input_uri": gcs_uri,
-            "video_context": context,
+            "input_uri": 'gs://my_first_bucket_vac/videoplayback.mp4',
+            "video_context": video_context,
         }
     )
 
