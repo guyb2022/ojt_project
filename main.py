@@ -17,7 +17,7 @@ import google.cloud
 from google.cloud import videointelligence_v1 as videointelligence
 
 
-def detect_faces(gcs_uri="gs://my_first_bucket_vac/videoplayback.mp4"):
+def detect_faces(event, file_context):
     """Detects faces in a video."""
 
     client = videointelligence.VideoIntelligenceServiceClient()
@@ -32,7 +32,7 @@ def detect_faces(gcs_uri="gs://my_first_bucket_vac/videoplayback.mp4"):
     operation = client.annotate_video(
         request={
             "features": [videointelligence.Feature.FACE_DETECTION],
-            "input_uri": gcs_uri,
+            "input_uri": event,
             "video_context": context,
         }
     )
@@ -76,6 +76,30 @@ def detect_faces(gcs_uri="gs://my_first_bucket_vac/videoplayback.mp4"):
                         attribute.name, attribute.value, attribute.confidence
                     )
                 )
+                
+def trigger_from_cloud_storge(event, context):
+    """Triggered by a change to a Cloud Storage bucket.
+    Args:
+         event (dict): Event payload.
+         context (google.cloud.functions.Context): Metadata for the event.
+    """
+    file = event
+    file_type = file["name"].split(".")[-1]
+    print(f"file type: {file_type}")
 
+    if file_type in ["jpg", "png", "jpeg"]:
+        print("Image file detected.")
+        # process the image
+        process_image(file, context)
+    # detect if the file is a audio file
+    elif file_type in ["mp3", "wav"]:
+        print("Audio file detected.")
+        # process the audio file
+        process_audio(file, context)
+    elif file_type in ["mp4]:
+        # process the video file
+        process_video(file, context)               
+    else:
+        print("Not a valid file type.")
 
 # [END video_detect_faces_gcs]
