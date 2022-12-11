@@ -16,7 +16,7 @@
 from google.cloud import videointelligence_v1 as videointelligence
 
 
-def detect_faces():
+def detect_faces(gcs_uri="gs://my_first_bucket_vac/videoplayback.mp4"):
     """Detects faces in a video."""
 
     client = videointelligence.VideoIntelligenceServiceClient()
@@ -25,14 +25,14 @@ def detect_faces():
     config = videointelligence.FaceDetectionConfig(
         include_bounding_boxes=True, include_attributes=True
     )
-    video_context = videointelligence.VideoContext(face_detection_config=config)
+    context = videointelligence.VideoContext(face_detection_config=config)
 
     # Start the asynchronous request
     operation = client.annotate_video(
         request={
             "features": [videointelligence.Feature.FACE_DETECTION],
-            #"input_uri": 'gs://my_first_bucket_vac/videoplayback.mp4',
-            "video_context": video_context,
+            "input_uri": gcs_uri,
+            "video_context": context,
         }
     )
     print(f"the request was: {request}")
