@@ -90,15 +90,15 @@ def trigger_from_cloud_storge(event, context):
     if file_type in ["jpg", "png", "jpeg"]:
         print("Image file detected.")
         # process the image
-        process_image(file, context)
+        pass
     # detect if the file is a audio file
     elif file_type in ["mp3", "wav"]:
         print("Audio file detected.")
         # process the audio file
-        process_audio(file, context)
+        pass
     elif file_type in ["mp4"]:
         # process the video file
-        process_video(file, context)               
+        detect_faces(file, context)               
     else:
         print("Not a valid file type.")
 
