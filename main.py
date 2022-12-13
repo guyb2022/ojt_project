@@ -13,69 +13,60 @@
 # limitations under the License.
 
 # [START video_detect_faces_gcs]
-import google.cloud
+import time
 from google.cloud import videointelligence_v1 as videointelligence
 
+gcs_uri = "gs://my_first_bucket_vac/videoplayback.mp4"
+output_uri = "gs://result_ojt_after_api/output - {}.json".format(time.time())
 
-def detect_faces(event, file_context):
+video_client = videointelligence.VideoIntelligenceServiceClient.from_service_account_file("my_keys.json")
+
+
+def run_all_functions(event, file_context):
     """Detects faces in a video."""
+    features = [
+    videointelligence.Feature.OBJECT_TRACKING,
+    videointelligence.Feature.LABEL_DETECTION,
+    videointelligence.Feature.SHOT_CHANGE_DETECTION,
+    videointelligence.Feature.SPEECH_TRANSCRIPTION,
+    videointelligence.Feature.LOGO_RECOGNITION,
+    videointelligence.Feature.EXPLICIT_CONTENT_DETECTION,
+    videointelligence.Feature.TEXT_DETECTION,
+    videointelligence.Feature.FACE_DETECTION,
+    videointelligence.Feature.PERSON_DETECTION
+    ]
+    
+    transcript_config = videointelligence.SpeechTranscriptionConfig(
+    language_code="en-US", enable_automatic_punctuation=True
+    )
 
-    client = videointelligence.VideoIntelligenceServiceClient()
+    person_config = videointelligence.PersonDetectionConfig(
+        include_bounding_boxes=True,
+        include_attributes=False,
+        include_pose_landmarks=True,
+    )
 
-    # Configure the request
-    config = videointelligence.FaceDetectionConfig(
+    face_config = videointelligence.FaceDetectionConfig(
         include_bounding_boxes=True, include_attributes=True
     )
-    context = videointelligence.VideoContext(face_detection_config=config)
 
-    # Start the asynchronous request
-    operation = client.annotate_video(
-        request={
-            "features": [videointelligence.Feature.FACE_DETECTION],
-            "input_uri": event,
-            "video_context": context,
-        }
+    video_context = videointelligence.VideoContext(
+        speech_transcription_config=transcript_config,
+        person_detection_config=person_config,
+        face_detection_config=face_config)
+
+    operation = video_client.annotate_video(
+        request={"features": features,
+                 "input_uri": gcs_uri,
+                 "output_uri": output_uri,
+                 "video_context": video_context}
     )
 
-    print("\nProcessing video for face detection annotations.")
+    print("\nProcessing video.", operation)
+
     result = operation.result(timeout=300)
 
-    print("\nFinished processing.\n")
-
-    # Retrieve the first result, because a single video was processed.
-    annotation_result = result.annotation_results[0]
-
-    for annotation in annotation_result.face_detection_annotations:
-        print("Face detected:")
-        for track in annotation.tracks:
-            print(
-                "Segment: {}s to {}s".format(
-                    track.segment.start_time_offset.seconds
-                    + track.segment.start_time_offset.microseconds / 1e6,
-                    track.segment.end_time_offset.seconds
-                    + track.segment.end_time_offset.microseconds / 1e6,
-                )
-            )
-
-            # Each segment includes timestamped faces that include
-            # characteristics of the face detected.
-            # Grab the first timestamped face
-            timestamped_object = track.timestamped_objects[0]
-            box = timestamped_object.normalized_bounding_box
-            print("Bounding box:")
-            print("\tleft  : {}".format(box.left))
-            print("\ttop   : {}".format(box.top))
-            print("\tright : {}".format(box.right))
-            print("\tbottom: {}".format(box.bottom))
-
-            # Attributes include glasses, headwear, smiling, direction of gaze
-            print("Attributes:")
-            for attribute in timestamped_object.attributes:
-                print(
-                    "\t{}:{} {}".format(
-                        attribute.name, attribute.value, attribute.confidence
-                    )
-                )
+    print("\n finnished processing.")
                 
 def trigger_from_cloud_storge(event, context):
     """Triggered by a change to a Cloud Storage bucket.
@@ -85,21 +76,5 @@ def trigger_from_cloud_storge(event, context):
     """
     file = event
     file_type = file["name"].split(".")[-1]
-    print(f"file type: {file_type}")
-
-    if file_type in ["jpg", "png", "jpeg"]:
-        print("Image file detected.")
-        # process the image
-        pass
-    # detect if the file is a audio file
-    elif file_type in ["mp3", "wav"]:
-        print("Audio file detected.")
-        # process the audio file
-        pass
-    elif file_type in ["mp4"]:
-        # process the video file
-        detect_faces(file, context)               
-    else:
-        print("Not a valid file type.")
-
-# [END video_detect_faces_gcs]
+    # process the video file
+    run_all_functions(file, context)               
