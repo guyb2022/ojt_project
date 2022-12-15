@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START video_detect_faces_gcs]
 import time
 from google.protobuf import descriptor as descriptor_mod
 from google.cloud import videointelligence
@@ -22,20 +21,8 @@ output_uri = "gs://result_ojt_after_api/output - {}.json".format(time.time())
 
 video_client = videointelligence.VideoIntelligenceServiceClient.from_service_account_file("my_keys.json")
 
-
 def run_all_functions(event, file_context):
     """Detects faces in a video."""
-    features = [
-    videointelligence.Feature.OBJECT_TRACKING,
-    videointelligence.Feature.LABEL_DETECTION,
-    videointelligence.Feature.SHOT_CHANGE_DETECTION,
-    videointelligence.Feature.SPEECH_TRANSCRIPTION,
-    videointelligence.Feature.LOGO_RECOGNITION,
-    videointelligence.Feature.EXPLICIT_CONTENT_DETECTION,
-    videointelligence.Feature.TEXT_DETECTION,
-    videointelligence.Feature.FACE_DETECTION,
-    videointelligence.Feature.PERSON_DETECTION
-    ]
     
     transcript_config = videointelligence.SpeechTranscriptionConfig(
     language_code="en-US", enable_automatic_punctuation=True
@@ -56,6 +43,18 @@ def run_all_functions(event, file_context):
         person_detection_config=person_config,
         face_detection_config=face_config)
 
+    features = [
+    videointelligence.Feature.OBJECT_TRACKING,
+    videointelligence.Feature.LABEL_DETECTION,
+    videointelligence.Feature.SHOT_CHANGE_DETECTION,
+    videointelligence.Feature.SPEECH_TRANSCRIPTION,
+    videointelligence.Feature.LOGO_RECOGNITION,
+    videointelligence.Feature.EXPLICIT_CONTENT_DETECTION,
+    videointelligence.Feature.TEXT_DETECTION,
+    videointelligence.Feature.FACE_DETECTION,
+    videointelligence.Feature.PERSON_DETECTION
+    ]
+    
     operation = video_client.annotate_video(
         request={"features": features,
                  "input_uri": gcs_uri,
@@ -69,7 +68,7 @@ def run_all_functions(event, file_context):
 
     print("\n finnished processing.")
                 
-def trigger_from_cloud_storge(event, context):
+def event_from_cloud_storge(event, context):
     """Triggered by a change to a Cloud Storage bucket.
     Args:
          event (dict): Event payload.
