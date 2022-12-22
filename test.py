@@ -19,8 +19,8 @@ from google.cloud import videointelligence
 gcs_uri = "gs://my_first_bucket_vac/videoplayback.mp4"
 output_uri = "gs://result_ojt_after_api/output - {}.json".format(time.time())
 
-video_client = videointelligence.VideoIntelligenceServiceClient.from_service_account_file("my_keys.json")
-#video_client = videointelligence.VideoIntelligenceServiceClient()
+#video_client = videointelligence.VideoIntelligenceServiceClient.from_service_account_file("my_keys.json")
+video_client = videointelligence.VideoIntelligenceServiceClient()
 
 def run_all_functions(event, file_context):
     """Detects faces in a video."""
