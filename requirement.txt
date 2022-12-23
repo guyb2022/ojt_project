@@ -1,1 +1,6 @@
 
+Flask==1.0.2
+requests>=2.20.0
+google-cloud-storage
+google-cloud-logging
+google-cloud-videointelligence
