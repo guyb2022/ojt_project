@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import time
+import google.cloud
 from google.protobuf import descriptor as descriptor_mod
 from google.cloud import videointelligence
 
