@@ -13,8 +13,6 @@
 # limitations under the License.
 
 import time
-import google.cloud
-#from google.protobuf import descriptor as descriptor_mod
 from google.cloud import videointelligence
 
 gcs_uri = "gs://my_first_bucket_vac/videoplayback.mp4"
