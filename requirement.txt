@@ -1,7 +1,7 @@
 
-Flask==1.0.2
-requests>=2.20.0
-google-cloud-storage
-google-cloud-logging
-google-cloud-videointelligence
-protobuf==4.21.11
+Flask==2.2.2
+requests==2.28.1
+google-cloud-storage==2.7.0
+google-cloud-logging==3.3.1
+google-cloud-videointelligence==2.9.0
+
