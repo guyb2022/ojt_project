@@ -4,3 +4,4 @@ requests>=2.20.0
 google-cloud-storage
 google-cloud-logging
 google-cloud-videointelligence
+protobuf==4.21.11
