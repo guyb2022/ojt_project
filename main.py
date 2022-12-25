@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import time
-from google.cloud import videointelligence
+import google.cloud.videointelligence as videointelligence
 
 gcs_uri = "gs://my_first_bucket_vac/videoplayback.mp4"
 output_uri = "gs://result_ojt_after_api/output - {}.json".format(time.time())
