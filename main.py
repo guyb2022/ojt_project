@@ -16,8 +16,9 @@ import time
 from google.cloud import videointelligence
 from google.cloud import storage
 
-gcs_uri = "gs://upload-video-vms/videoplayback.mp4"
-output_uri = "gs://results-json-vms/{}.json".videoplayback)
+file_name = "videoplayback"
+gcs_uri = f"gs://upload-video-vms/{file_name}.mp4"
+output_uri = f"gs://results-json-vms/{file_name}.json"
 video_client = videointelligence.VideoIntelligenceServiceClient()
 
 def run_all_functions(event, file_context):
