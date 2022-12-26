@@ -14,6 +14,7 @@
 
 import time
 from google.cloud import videointelligence
+from google.cloud import storage
 
 gcs_uri = "gs://my_first_bucket_vac/videoplayback.mp4"
 output_uri = "gs://result_ojt_after_api/output - {}.json".format(time.time())
