@@ -3,4 +3,5 @@ google-cloud-storage==2.1.0
 google-cloud-translate==3.8.0
 google-cloud-vision==3.1.0
 google-cloud-videointelligence==2.8.3
+gunicorn==19.9.0
 
